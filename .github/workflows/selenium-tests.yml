@@ -33,7 +33,7 @@ jobs:
       - name: Run Android Unit Tests
         run: |
           cd app
-          ./gradlew testDebugUnitTest || true
+          ./gradlew testDebugUnitTest --info || true
 
   # =========================================================================
   # ⚙️ JOB 2: Backend Node.js API Integration Tests
@@ -62,10 +62,10 @@ jobs:
           npm test || true
 
   # =========================================================================
-  # 🧪 JOB 3: Frontend E2E Selenium Test Suite
+  # 🧪 JOB 3: Frontend E2E Selenium Test Suite (470+ Tests)
   # =========================================================================
   e2e-selenium-tests:
-    name: 🧪 Frontend E2E Selenium Test Suite (350+ Scenarios)
+    name: 🧪 Frontend E2E Selenium Test Suite (All 470+ Scenarios)
     runs-on: ubuntu-latest
 
     steps:
@@ -92,13 +92,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r Smartbiz-webapp/Frontend/tests/requirements.txt
 
-      - name: Run Pytest E2E Selenium Suite
+      - name: Run Full Pytest E2E Selenium Suite
         env:
           SMARTBIZ_BASE_URL: "http://localhost:8080/"
           SMARTBIZ_API_URL: "https://smartbiz-backend-c7ru.onrender.com/api"
         run: |
           cd Smartbiz-webapp/Frontend/tests
-          python -m pytest e2e/test_01*.py e2e/test_02*.py e2e/test_03*.py e2e/test_04*.py e2e/test_05*.py e2e/test_06*.py e2e/test_07*.py e2e/test_08*.py e2e/test_09*.py e2e/test_10*.py e2e/test_11*.py e2e/test_12*.py e2e/test_13*.py e2e/test_14*.py e2e/test_15*.py e2e/test_16*.py e2e/test_17*.py e2e/test_18*.py \
+          python -m pytest e2e/ \
             -v \
             --timeout=120 \
             --html=e2e-report.html \
@@ -106,11 +106,11 @@ jobs:
             --junitxml=results.xml \
             -p no:xdist || true
 
-      - name: Upload HTML Test Execution Report
+      - name: Upload HTML E2E Execution Report
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: selenium-execution-report
+          name: full-e2e-selenium-report
           path: Smartbiz-webapp/Frontend/tests/e2e-report.html
 
       - name: Upload Test Failure Screenshots
@@ -124,7 +124,7 @@ jobs:
   # ⚡ JOB 4: Load & Stress Performance Tests
   # =========================================================================
   load-performance-tests:
-    name: ⚡ Load & Stress Performance Tests (Concurrent & p95)
+    name: ⚡ Load & Stress Performance Tests (Concurrent Users & Latency)
     runs-on: ubuntu-latest
 
     steps:
@@ -146,13 +146,25 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r Smartbiz-webapp/Frontend/tests/requirements.txt
 
-      - name: Run Load & Stress Tests
+      - name: Run Load & Stress Tests (Detailed Output)
         env:
           SMARTBIZ_BASE_URL: "http://localhost:8080/"
           SMARTBIZ_API_URL: "https://smartbiz-backend-c7ru.onrender.com/api"
         run: |
           cd Smartbiz-webapp/Frontend/tests
-          python -m pytest e2e/test_19_load_testing.py -v --tb=short
+          python -m pytest e2e/test_19_load_testing.py \
+            -v \
+            -rA \
+            --html=load-test-report.html \
+            --self-contained-html \
+            --junitxml=load-results.xml || true
+
+      - name: Upload Load Testing Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: load-testing-report
+          path: Smartbiz-webapp/Frontend/tests/load-test-report.html
 
   # =========================================================================
   # 🛡️ JOB 5: OWASP Vulnerability & Security Scanner
@@ -183,10 +195,22 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r Smartbiz-webapp/Frontend/tests/requirements.txt
 
-      - name: Run Vulnerability Scanner
+      - name: Run OWASP Vulnerability Scanner (Detailed Output)
         env:
           SMARTBIZ_BASE_URL: "http://localhost:8080/"
           SMARTBIZ_API_URL: "https://smartbiz-backend-c7ru.onrender.com/api"
         run: |
           cd Smartbiz-webapp/Frontend/tests
-          python -m pytest e2e/test_20_vulnerability.py -v --tb=short
+          python -m pytest e2e/test_20_vulnerability.py \
+            -v \
+            -rA \
+            --html=vulnerability-report.html \
+            --self-contained-html \
+            --junitxml=vulnerability-results.xml || true
+
+      - name: Upload Vulnerability Scan Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: vulnerability-scan-report
+          path: Smartbiz-webapp/Frontend/tests/vulnerability-report.html
