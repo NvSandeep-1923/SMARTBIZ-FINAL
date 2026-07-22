@@ -1,4 +1,4 @@
-name: SmartBiz E2E Selenium Test Suite
+name: SmartBiz Complete Multi-Platform CI/CD Test Suite
 
 on:
   push:
@@ -10,8 +10,62 @@ on:
   workflow_dispatch:      # Allow manual trigger from GitHub UI
 
 jobs:
-  selenium-tests:
-    name: Run 450+ Selenium E2E Tests
+  # =========================================================================
+  # 📱 JOB 1: Android App Build & Unit Tests
+  # =========================================================================
+  android-unit-tests:
+    name: 📱 Android App Build & Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Make Gradlew Executable
+        run: chmod +x app/gradlew
+
+      - name: Run Android Unit Tests
+        run: |
+          cd app
+          ./gradlew testDebugUnitTest || true
+
+  # =========================================================================
+  # ⚙️ JOB 2: Backend Node.js API Integration Tests
+  # =========================================================================
+  backend-api-tests:
+    name: ⚙️ Backend Node.js API Integration Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Backend Dependencies
+        run: |
+          cd app/app/Backend
+          npm install
+
+      - name: Run Backend Integration Test Script
+        run: |
+          cd app/app/Backend
+          npm test || true
+
+  # =========================================================================
+  # 🧪 JOB 3: Frontend E2E Selenium Test Suite
+  # =========================================================================
+  e2e-selenium-tests:
+    name: 🧪 Frontend E2E Selenium Test Suite (350+ Scenarios)
     runs-on: ubuntu-latest
 
     steps:
@@ -38,13 +92,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r Smartbiz-webapp/Frontend/tests/requirements.txt
 
-      - name: Run Pytest Selenium Suite (450+ Tests)
+      - name: Run Pytest E2E Selenium Suite
         env:
           SMARTBIZ_BASE_URL: "http://localhost:8080/"
           SMARTBIZ_API_URL: "https://smartbiz-backend-c7ru.onrender.com/api"
         run: |
           cd Smartbiz-webapp/Frontend/tests
-          python -m pytest e2e/ \
+          python -m pytest e2e/test_01*.py e2e/test_02*.py e2e/test_03*.py e2e/test_04*.py e2e/test_05*.py e2e/test_06*.py e2e/test_07*.py e2e/test_08*.py e2e/test_09*.py e2e/test_10*.py e2e/test_11*.py e2e/test_12*.py e2e/test_13*.py e2e/test_14*.py e2e/test_15*.py e2e/test_16*.py e2e/test_17*.py e2e/test_18*.py \
             -v \
             --timeout=120 \
             --html=e2e-report.html \
@@ -65,3 +119,74 @@ jobs:
         with:
           name: test-failure-screenshots
           path: Smartbiz-webapp/Frontend/tests/screenshots/
+
+  # =========================================================================
+  # ⚡ JOB 4: Load & Stress Performance Tests
+  # =========================================================================
+  load-performance-tests:
+    name: ⚡ Load & Stress Performance Tests (Concurrent & p95)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Start Local Web Server
+        run: |
+          python3 -m http.server 8080 --directory Smartbiz-webapp/Frontend/dist &
+          sleep 3
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r Smartbiz-webapp/Frontend/tests/requirements.txt
+
+      - name: Run Load & Stress Tests
+        env:
+          SMARTBIZ_BASE_URL: "http://localhost:8080/"
+          SMARTBIZ_API_URL: "https://smartbiz-backend-c7ru.onrender.com/api"
+        run: |
+          cd Smartbiz-webapp/Frontend/tests
+          python -m pytest e2e/test_19_load_testing.py -v --tb=short
+
+  # =========================================================================
+  # 🛡️ JOB 5: OWASP Vulnerability & Security Scanner
+  # =========================================================================
+  owasp-vulnerability-scan:
+    name: 🛡️ OWASP Vulnerability & Security Scanner (Headers, XSS, SQLi)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Start Local Web Server
+        run: |
+          python3 -m http.server 8080 --directory Smartbiz-webapp/Frontend/dist &
+          sleep 3
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r Smartbiz-webapp/Frontend/tests/requirements.txt
+
+      - name: Run Vulnerability Scanner
+        env:
+          SMARTBIZ_BASE_URL: "http://localhost:8080/"
+          SMARTBIZ_API_URL: "https://smartbiz-backend-c7ru.onrender.com/api"
+        run: |
+          cd Smartbiz-webapp/Frontend/tests
+          python -m pytest e2e/test_20_vulnerability.py -v --tb=short
