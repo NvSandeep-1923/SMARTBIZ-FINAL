@@ -1,0 +1,51 @@
+# ==========================================
+# Node modules (never commit these)
+# ==========================================
+node_modules/
+**/node_modules/
+
+# ==========================================
+# Android build artifacts
+# ==========================================
+app/.gradle/
+app/build/
+app/app/build/
+app/local.properties
+app/.idea/
+app/**/*.iml
+app/**/*.class
+app/**/*.dex
+
+# Android log/debug files
+app/build_errors*.txt
+app/build_log*.txt
+app/compile_errors*.txt
+app/gradle_error*.log
+app/login_debug.txt
+app/register_debug.txt
+app/reg2.txt
+app/tmp/
+
+# ==========================================
+# Webapp
+# ==========================================
+Smartbiz-webapp/.pytest_cache/
+Smartbiz-webapp/.git/
+Smartbiz-webapp/.github/
+
+# ==========================================
+# OS Files
+# ==========================================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==========================================
+# IDE files
+# ==========================================
+.vscode/
+.idea/
+*.iml
+*.suo
+*.user
+.kiro/

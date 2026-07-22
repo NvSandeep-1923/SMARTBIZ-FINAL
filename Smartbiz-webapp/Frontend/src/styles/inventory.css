@@ -1,0 +1,91 @@
+.search-input {
+  width: 100%;
+  padding: var(--spacing-md);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: white;
+  outline: none;
+}
+
+.filter-chips {
+  display: flex;
+  gap: var(--spacing-sm);
+  overflow-x: auto;
+  padding-bottom: var(--spacing-xs);
+}
+
+.chip {
+  padding: var(--spacing-xs) var(--spacing-md);
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.chip.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.inventory-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md) !important;
+}
+
+.item-name {
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.item-sku {
+  font-size: 0.625rem;
+  color: var(--text-secondary);
+}
+
+.item-stats {
+  text-align: right;
+}
+
+.item-price {
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.item-stock {
+  font-size: 0.75rem;
+  margin-top: 2px;
+}
+
+.status-badge {
+  background: var(--error-bg);
+  color: var(--error);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.625rem;
+  font-weight: 700;
+  margin-left: 4px;
+}
+
+.fab {
+  position: fixed;
+  bottom: 80px;
+  right: var(--spacing-md);
+  width: 56px;
+  height: 56px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: 1.5rem;
+  box-shadow: var(--shadow-lg);
+  cursor: pointer;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

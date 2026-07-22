@@ -1,0 +1,66 @@
+name: Deploy and Test
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Frontend
+        run: npm run build
+
+      - name: Start Background Vite Preview
+        run: |
+          npx vite preview --port 5173 --host 127.0.0.1 --base /Smartbiz-webapp/ &
+          sleep 4
+          curl --retry 5 --retry-connrefused http://127.0.0.1:5173/Smartbiz-webapp/
+
+      - name: Run E2E Tests
+        env:
+          TEST_BASE_URL: http://127.0.0.1:5173/Smartbiz-webapp/
+        run: |
+          npx mocha SmartBizE2E/tests/mega_web_1100.test.js --reporter ./SmartBizE2E/utils/excelReporter.js
+
+      - name: Prepare Unified Bundle
+        run: |
+          mkdir -p dist/reports/latest
+          mkdir -p dist/reports/history/build-${{ github.run_number }}
+          cp Test_Results/HTML/execution-report.html dist/reports/latest/execution-report.html
+          cp Test_Results/HTML/execution-report.html dist/reports/history/build-${{ github.run_number }}/execution-report.html
+          # Also copy Excel if needed for download
+          cp Test_Results/Excel/selenium-report.xlsx dist/reports/latest/selenium-report.xlsx
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: GitHub Step Summary
+        run: |
+          echo "## 🚀 E2E Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Tests Passed:** $(grep -o 'badge-pass' Test_Results/HTML/execution-report.html | wc -l)" >> $GITHUB_STEP_SUMMARY
+          echo "❌ **Tests Failed:** $(grep -o 'badge-fail' Test_Results/HTML/execution-report.html | wc -l)" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 [View Live Report](https://NvSandeep-1923.github.io/Smartbiz-webapp/reports/latest/execution-report.html)" >> $GITHUB_STEP_SUMMARY

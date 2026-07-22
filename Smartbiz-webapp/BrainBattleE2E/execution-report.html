@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartBiz E2E Execution Report</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f8fafc;
+            --primary: #38bdf8;
+            --success: #22c55e;
+            --danger: #ef4444;
+        }
+        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); padding: 2rem; margin: 0; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card { background: var(--card); padding: 1.5rem; border-radius: 12px; border: 1px solid #334155; text-align: center; }
+        .stat-val { font-size: 2.5rem; font-weight: 800; color: var(--primary); }
+        .stat-label { color: #94a3b8; font-size: 0.875rem; margin-top: 0.5rem; text-transform: uppercase; }
+        .table-container { background: var(--card); border-radius: 12px; border: 1px solid #334155; overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #334155; padding: 1rem; text-align: left; font-size: 0.875rem; }
+        td { padding: 1rem; border-top: 1px solid #334155; font-size: 0.875rem; }
+        .badge { padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 0.75rem; }
+        .badge-passed { background: rgba(34, 197, 94, 0.2); color: var(--success); }
+        .badge-failed { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+        .error-stack { font-family: monospace; color: #ef4444; margin-top: 8px; display: block; font-size: 0.75rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 SmartBiz Mega E2E Report</h1>
+            <div class="timestamp">19/6/2026, 2:06:47 pm</div>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-val">10</div>
+                <div class="stat-label">Total Tests</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-val" style="color: var(--success)">10</div>
+                <div class="stat-label">Passed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-val" style="color: var(--danger)">0</div>
+                <div class="stat-label">Failed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-val">100.0%</div>
+                <div class="stat-label">Pass Rate</div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Test Case</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Duration</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                        <tr>
+                            <td>
+                                <strong>BrainBattle Mega E2E Suite (1,100 Assertions) Functional - Auth TC-001-01: Verification of Functional - Auth logic - Assertion 1</strong>
+                                
+                            </td>
+                            <td>Functional - Auth</td>
+                            <td><span class="badge badge-passed">PASSED</span></td>
+                            <td>470ms</td>
+                        </tr>
+                    
+                        <tr>
+                            <td>
+                                <strong>BrainBattle Mega E2E Suite (1,100 Assertions) Functional - Auth TC-001-02: Verification of Functional - Auth logic - Assertion 2</strong>
+                                
+                            </td>
+                            <td>Functional - Auth</td>
+                            <td><span class="badge badge-passed">PASSED</span></td>
+                            <td>10ms</td>
+                        </tr>
+                    
+                        <tr>
+                            <td>
+                                <strong>BrainBattle Mega E2E Suite (1,100 Assertions) Functional - Auth TC-001-03: Verification of Functional - Auth logic - Assertion 3</strong>
+                                
+                            </td>
+                            <td>Functional - Auth</td>
+                            <td><span class="badge badge-passed">PASSED</span></td>
+                            <td>8ms</td>
+                        </tr>
+                    
+                        <tr>
+                            <td>
+                                <strong>BrainBattle Mega E2E Suite (1,100 Assertions) Functional - Auth TC-001-04: Verification of Functional - Auth logic - Assertion 4</strong>
+                                
+                            </td>
+                            <td>Functional - Auth</td>
+                            <td><span class="badge badge-passed">PASSED</span></td>
+                            <td>8ms</td>
+                        </tr>
+                    
+                        <tr>
+                            <td>
+                                <strong>BrainBattle Mega E2E Suite (1,100 Assertions) Functional - Auth TC-001-05: Verification of Functional - Auth logic - Assertion 5</strong>
+                                
+                            </td>
+                            <td>Functional - Auth</td>
+                            <td><span class="badge badge-passed">PASSED</span></td>
+                            <td>8ms</td>
+                        </tr>
+                    
+                        <tr>
+                            <td>
+                                <strong>BrainBattle Mega E2E Suite (1,100 Assertions) Functional - Auth TC-001-06: Verification of Functional - Auth logic - Assertion 6</strong>
+                                
+                            </td>
+                            <td>Functional - Auth</td>
+                            <td><span class="badge badge-passed">PASSED</span></td>
+                            <td>7ms</td>
+                        </tr>
+                    
+                        <tr>
+                            <td>
+                                <strong>BrainBattle Mega E2E Suite (1,100 Assertions) Functional - Auth TC-001-07: Verification of Functional - Auth logic - Assertion 7</strong>
+                                
+                            </td>
+                            <td>Functional - Auth</td>
+                            <td><span class="badge badge-passed">PASSED</span></td>
+                            <td>3ms</td>
+                        </tr>
+                    
+                        <tr>
+                            <td>
+                                <strong>BrainBattle Mega E2E Suite (1,100 Assertions) Functional - Auth TC-001-08: Verification of Functional - Auth logic - Assertion 8</strong>
+                                
+                            </td>
+                            <td>Functional - Auth</td>
+                            <td><span class="badge badge-passed">PASSED</span></td>
+                            <td>4ms</td>
+                        </tr>
+                    
+                        <tr>
+                            <td>
+                                <strong>BrainBattle Mega E2E Suite (1,100 Assertions) Functional - Auth TC-001-09: Verification of Functional - Auth logic - Assertion 9</strong>
+                                
+                            </td>
+                            <td>Functional - Auth</td>
+                            <td><span class="badge badge-passed">PASSED</span></td>
+                            <td>5ms</td>
+                        </tr>
+                    
+                        <tr>
+                            <td>
+                                <strong>BrainBattle Mega E2E Suite (1,100 Assertions) Functional - Auth TC-001-10: Verification of Functional - Auth logic - Assertion 10</strong>
+                                
+                            </td>
+                            <td>Functional - Auth</td>
+                            <td><span class="badge badge-passed">PASSED</span></td>
+                            <td>9ms</td>
+                        </tr>
+                    
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+    
