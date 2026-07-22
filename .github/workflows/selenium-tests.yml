@@ -18,6 +18,22 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build Frontend Application
+        run: |
+          cd Smartbiz-webapp/Frontend
+          npm install
+          npm run build
+
+      - name: Start Local Web Server
+        run: |
+          python3 -m http.server 8080 --directory Smartbiz-webapp/Frontend/dist &
+          sleep 3
+
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
@@ -35,7 +51,7 @@ jobs:
 
       - name: Run Pytest Selenium Suite (450+ Tests)
         env:
-          SMARTBIZ_BASE_URL: "https://thegitguy-56.github.io/Smartbiz-frontend/"
+          SMARTBIZ_BASE_URL: "http://localhost:8080/"
           SMARTBIZ_API_URL: "https://smartbiz-backend-c7ru.onrender.com/api"
         run: |
           cd Smartbiz-webapp/Frontend/tests
