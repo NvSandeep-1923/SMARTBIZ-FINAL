@@ -41,6 +41,19 @@ Thumbs.db
 desktop.ini
 
 # ==========================================
+# Python & Test Artifacts
+# ==========================================
+__pycache__/
+**/__pycache__/
+*.pyc
+*.html
+*.xml
+*.log
+*.jsonl
+screenshots/
+**/screenshots/
+
+# ==========================================
 # IDE files
 # ==========================================
 .vscode/

@@ -1,0 +1,68 @@
+name: SmartBiz E2E Selenium Test Suite
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  schedule:
+    - cron: '0 6 * * *'  # Run automatically every day at 06:00 UTC
+  workflow_dispatch:      # Allow manual trigger from GitHub UI
+
+jobs:
+  selenium-tests:
+    name: Run 450+ Selenium E2E Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: 'Smartbiz-webapp/Frontend/tests/requirements.txt'
+
+      - name: Install Chrome Browser
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget curl unzip libxi6 libgconf-2-4 libnss3
+          wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r Smartbiz-webapp/Frontend/tests/requirements.txt
+
+      - name: Run Pytest Selenium Suite (450+ Tests)
+        env:
+          SMARTBIZ_BASE_URL: "https://thegitguy-56.github.io/Smartbiz-frontend/"
+          SMARTBIZ_API_URL: "https://smartbiz-backend-c7ru.onrender.com/api"
+        run: |
+          cd Smartbiz-webapp/Frontend/tests
+          python -m pytest e2e/ \
+            -v \
+            --timeout=120 \
+            --html=e2e-report.html \
+            --self-contained-html \
+            --junitxml=results.xml \
+            -p no:xdist || true
+
+      - name: Upload HTML Test Execution Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: selenium-execution-report
+          path: Smartbiz-webapp/Frontend/tests/e2e-report.html
+
+      - name: Upload Test Failure Screenshots
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-failure-screenshots
+          path: Smartbiz-webapp/Frontend/tests/screenshots/
