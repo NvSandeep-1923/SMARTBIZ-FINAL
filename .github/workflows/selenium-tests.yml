@@ -113,6 +113,19 @@ jobs:
           name: full-e2e-selenium-report
           path: Smartbiz-webapp/Frontend/tests/e2e-report.html
 
+      - name: Generate Excel Test Report
+        if: always()
+        run: |
+          cd Smartbiz-webapp/Frontend/tests
+          python generate_report.py results.xml execution_log.jsonl || true
+
+      - name: Upload Excel Test Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-excel-report
+          path: Smartbiz-webapp/Frontend/tests/*.xlsx
+
       - name: Upload Test Failure Screenshots
         uses: actions/upload-artifact@v4
         if: always()
@@ -166,6 +179,19 @@ jobs:
           name: load-testing-report
           path: Smartbiz-webapp/Frontend/tests/load-test-report.html
 
+      - name: Generate Excel Load Test Report
+        if: always()
+        run: |
+          cd Smartbiz-webapp/Frontend/tests
+          python generate_report.py load-results.xml execution_log.jsonl || true
+
+      - name: Upload Excel Load Test Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: load-excel-report
+          path: Smartbiz-webapp/Frontend/tests/*.xlsx
+
   # =========================================================================
   # 🛡️ JOB 5: OWASP Vulnerability & Security Scanner
   # =========================================================================
@@ -214,3 +240,16 @@ jobs:
         with:
           name: vulnerability-scan-report
           path: Smartbiz-webapp/Frontend/tests/vulnerability-report.html
+
+      - name: Generate Excel Vulnerability Report
+        if: always()
+        run: |
+          cd Smartbiz-webapp/Frontend/tests
+          python generate_report.py vulnerability-results.xml execution_log.jsonl || true
+
+      - name: Upload Excel Vulnerability Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: vulnerability-excel-report
+          path: Smartbiz-webapp/Frontend/tests/*.xlsx
